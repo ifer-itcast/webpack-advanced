@@ -1,5 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/index.js',
@@ -8,7 +11,7 @@ module.exports = {
         path: path.join(__dirname, 'dist'), // 必须是绝对路径
         filename: 'bundle.js'
     },
-    mode: 'development', // 默认为 production
+    mode: 'production', // 默认为 production
     // watch: true
     devServer: {
         compress: true,
@@ -21,7 +24,17 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'src/index.html'
-        })
+        }),
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.join(__dirname, 'assets'),
+                    to: 'assets' // 会相对于输出路径（dist）进行拼接
+                }
+            ]
+        }),
+        new webpack.BannerPlugin('黑马牛逼啊')
     ],
     module: {
         rules: [
