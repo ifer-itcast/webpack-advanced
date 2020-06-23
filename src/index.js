@@ -1,14 +1,14 @@
-function *fn() {
-    yield 1;
-    yield 2;
-    return 3;
+import {
+    getUserInfo
+} from './api/http';
+
+import str from './hotmodule';
+
+getUserInfo().then(() => {}, err => {
+    console.log(err);
+});
+
+if (module.hot) {
+    // 当 hotmodule 模块内容变化时会触发回调
+    module.hot.accept('./hotmodule.js', () => require('./hotmodule'));
 }
-let it = fn();
-console.log(it.next());
-console.log(it.next());
-console.log(it.next());
-
-
-import "@babel/polyfill";
-const arr = ['a', 'c', 'd'];
-console.log(arr.includes('b'));
