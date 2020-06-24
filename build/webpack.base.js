@@ -5,32 +5,18 @@ const {
 } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: {
-        index: './src/index.js',
-        a: './src/a.js',
-        b: './src/b.js'
-    },
+    entry: './src/index.js',
     output: {
         path: path.join(__dirname, '..', 'dist'), // 必须是绝对路径
-        filename: '[name].js'
+        filename: 'bundle.js'
     },
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: 'src/index.html',
-            chunks: ['index', 'a']
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'a.html',
-            template: 'src/a.html',
-            chunks: ['a']
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'b.html',
-            template: 'src/b.html',
-            chunks: ['b']
+            template: 'src/index.html'
         }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
@@ -43,20 +29,23 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
+        }),
+        new MiniCssExtractPlugin({
+            filename: 'main.css'
         })
     ],
     module: {
         rules: [{
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
             },
             {
                 test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader']
             },
             {
                 test: /\.s[ac]ss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
             },
             {
                 test: /\.(png|jpg|jpeg|gif|webp|woff|woff2|ttf|svg|eot)/,
@@ -91,5 +80,5 @@ module.exports = {
                 }
             }
         ],
-    },
+    }
 };

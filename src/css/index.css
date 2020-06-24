@@ -1,0 +1,5 @@
+body {
+    background-color: pink;
+    transform: rotate(50deg);
+    background: linear-gradient(red, green);
+}
